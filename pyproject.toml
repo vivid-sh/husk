@@ -1,0 +1,58 @@
+[project]
+name = "husk-cli"
+version = "0.1.0"
+description = "A tool for building ~10x smaller, self-hostable, read-only container registries"
+authors = [{name = "dosisod"}]
+license = {text = "MIT"}
+readme = "README.md"
+classifiers = [
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Typing :: Typed"
+]
+requires-python = ">=3.10"
+
+[project.urls]
+Source = "https://github.com/vivid-sh/husk"
+
+[project.scripts]
+husk = "husk:cli_main"
+
+[tool.setuptools]
+packages = ["husk"]
+
+[tool.isort]
+line_length = 99
+multi_line_output = 3
+include_trailing_comma = true
+color_output = true
+
+[tool.ruff]
+line-length = 99
+preview = true
+
+lint.select = ["ALL"]
+
+lint.extend-ignore = [
+  "COM812",
+  "D100", "D101", "D102", "D103", "D104", "D105", "D107", "D200", "D202", "D203",
+  "D205", "D212", "D214", "D400", "D401", "D404", "D405", "D406", "D407", "D412",
+  "D413", "D415", "D416",
+  "CPY001",
+  "FIX002", "FIX004",
+  "I001",
+  "INP001",
+  "PLR2004",
+  "PLW1510",
+  "S101", "S404",
+  "TD002", "TD003",
+
+  # Consider this
+  "PLR0914",
+  "T201",
+]
+
+target-version = "py310"
+
+[tool.ruff.lint.per-file-ignores]
+"test/*" = ["S603", "S607"]

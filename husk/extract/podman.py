@@ -52,11 +52,7 @@ async def list_images_for_reference(ref: str) -> list[dict[str, Any]]:
     images = json.loads(await process.stdout.read())
 
     def known_name_matches_ref(image: dict[str, Any], ref: str) -> bool:
-        for name in image["Names"]:
-            if fnmatch.fnmatch(name, ref):
-                return True
-
-        return False
+        return any(fnmatch.fnmatch(name, ref) for name in image["Names"])
 
     return [image for image in images if known_name_matches_ref(image, ref)]
 
@@ -315,7 +311,7 @@ async def extract_image(ctx: PodmanContext, image: dict[str, Any]) -> None:
     image_name = remove_image_domain_name(image_name)
 
     ctx.manifest_tags.append(
-        f"/v2/{image_name}/manifests/{image_tag} /v2/{image_name}/manifests/sha256:{manifest_digest};\n"
+        f"/v2/{image_name}/manifests/{image_tag} /v2/{image_name}/manifests/sha256:{manifest_digest};\n"  # noqa: E501
     )
 
     shutil.copyfile(

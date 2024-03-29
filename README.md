@@ -49,7 +49,7 @@ $ docker run --rm -it your-domain.com/your-image-here
 Husk offers many benefits over the standard [Docker Registry](https://hub.docker.com/_/registry):
 
 * Husk is read-only, giving you secure anonymous access out of the box
-* Husk only stores blobs you built locally: blobs available on Docker Hub are defered to Docker Hub (we call this "blob sharding")
+* Husk only stores blobs you built locally: blobs available on Docker Hub are deferred to Docker Hub (we call this "blob sharding")
 * Husk uses NGINX for fast static file hosting/caching
 * Husk supports infinite namespaces for images. For example: `your-domain.com/service/saas-product/backend/api:v1`
 

@@ -11,6 +11,9 @@ classifiers = [
   "Typing :: Typed"
 ]
 requires-python = ">=3.10"
+dependencies = [
+  "httpx >= 0.27.0",
+]
 
 [project.urls]
 Source = "https://github.com/vivid-sh/husk"
@@ -18,8 +21,12 @@ Source = "https://github.com/vivid-sh/husk"
 [project.scripts]
 husk = "husk:cli_main"
 
-[tool.setuptools]
-packages = ["husk"]
+[tool.setuptools.packages.find]
+where = ["husk"]
+include = ["*"]
+
+[tool.setuptools.package-data]
+husk = ["*"]
 
 [tool.isort]
 line_length = 99

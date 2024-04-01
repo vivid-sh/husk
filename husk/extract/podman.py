@@ -33,6 +33,10 @@ from husk.extract.common import (
 logger = logging.getLogger("husk")
 
 
+def get_repo_name(name: str) -> str:
+    return name.removeprefix("localhost/").split(":")[0]
+
+
 async def list_images_for_reference(ref: str) -> list[dict[str, Any]]:
     process = await asyncio.subprocess.create_subprocess_exec(
         "podman",
@@ -52,7 +56,9 @@ async def list_images_for_reference(ref: str) -> list[dict[str, Any]]:
     images = json.loads(await process.stdout.read())
 
     def known_name_matches_ref(image: dict[str, Any], ref: str) -> bool:
-        return any(fnmatch.fnmatch(name, ref) for name in image["Names"])
+        return any(
+            fnmatch.fnmatch(get_repo_name(name), ref) for name in image.get("Names", [])
+        )
 
     return [image for image in images if known_name_matches_ref(image, ref)]
 
@@ -236,7 +242,7 @@ async def extract_references(
 
 
 def get_full_image_name(image: dict[str, Any]) -> str:
-    return image["History"][0]
+    return image["History"][0].removeprefix("localhost/")
 
 
 async def extract_image(ctx: PodmanContext, image: dict[str, Any]) -> None:

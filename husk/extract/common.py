@@ -153,6 +153,7 @@ cd dist && docker compose up\
 class Settings:
     refs: list[str] = field(default_factory=list)
     dist: Path | None = None
+    keep_output: bool = False
 
 
 class ExtractContext:
@@ -163,6 +164,7 @@ class ExtractContext:
     manifest_tags: list[str]
     remote_blob_sources: dict[Sha256, str]
     all_blobs: dict[Sha256, BlobInfo]
+    keep_output: bool
     max_image_name = 0
 
     def __init__(self) -> None:
@@ -175,6 +177,7 @@ class ExtractContext:
         self.tmp_dir.mkdir(exist_ok=True)
 
         self.dist = settings.dist or Path("dist")
+        self.keep_output = settings.keep_output
 
         with suppress(FileNotFoundError):
             shutil.rmtree(self.dist)
@@ -293,7 +296,7 @@ class PrettyPrintHandler(logging.Handler):
 
 
 def setup_logging(ctx: ExtractContext) -> None:
-    handler = PrettyPrintHandler(max_len=ctx.max_image_name)
+    handler = PrettyPrintHandler(max_len=ctx.max_image_name, preserve=ctx.keep_output)
 
     logger.addHandler(handler)
     logger.setLevel(logging.DEBUG)

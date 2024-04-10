@@ -39,6 +39,9 @@ def main(argv: Sequence[str]) -> None:
 
     extract_sub_parser = parser.add_subparsers().add_parser("extract")
 
+    extract_sub_parser.add_argument(
+        "--keep-output", "-k", action="store_true", default=False
+    )
     extract_sub_parser.add_argument("--docker", action="store_true")
     extract_sub_parser.add_argument("--podman", action="store_true")
     extract_sub_parser.add_argument("--output-dir", "-o")
@@ -59,6 +62,9 @@ def main(argv: Sequence[str]) -> None:
 
     if args.output_dir:
         settings.dist = Path(args.output_dir)
+
+    if args.keep_output:
+        settings.keep_output = True
 
     if use_docker:
         if os.geteuid() != 0:
